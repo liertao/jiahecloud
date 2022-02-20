@@ -1,0 +1,61 @@
+<script>
+	import Vue from 'vue';
+	export default {
+		created() {
+					// #ifdef APP-PLUS
+					setTimeout(()=>{
+						plus.navigator.closeSplashscreen(); 
+					},3000)
+					// #endif 
+				},
+				onLaunch: function() {
+					console.log('App Launch')
+					uni.getSystemInfo({
+						success: function(e) {
+							// #ifndef MP
+							Vue.prototype.StatusBar = e.statusBarHeight;
+							if (e.platform == 'android') {
+								Vue.prototype.CustomBar = e.statusBarHeight + 50;
+							} else {
+								Vue.prototype.CustomBar = e.statusBarHeight + 45;
+							};
+							// #endif
+				
+							// #ifdef MP-WEIXIN
+							Vue.prototype.StatusBar = e.statusBarHeight;
+							let custom = wx.getMenuButtonBoundingClientRect();
+							Vue.prototype.Custom = custom;
+							Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+							// #endif		
+				
+							// #ifdef MP-ALIPAY
+							Vue.prototype.StatusBar = e.statusBarHeight;
+							Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
+							// #endif
+						}
+					})
+				},
+				onShow: function() {
+					console.log('App 开启')
+				},
+				onHide: function() {
+					console.log('App 关闭')
+				}
+	}
+</script>
+
+<style lang="scss">
+	@import "uview-ui/index.scss";
+	//引入Font Awesome图标库
+	@import "@/components/a-font/a-font.css";
+	/*每个页面公共css */
+	page{
+		background-color: #F7F7F7
+	}
+	.shadow{
+		box-shadow: 2upx 2upx 2upx #C5C5C5;
+	}
+	.from-item-height{
+		height: 80rpx;
+	}
+</style>

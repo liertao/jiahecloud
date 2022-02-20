@@ -1,0 +1,152 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/home/mytask",
+			"style": {
+				"navigationBarTitleText": "我的工作台",
+				// "navigationStyle": "custom",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style":{
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/main/mainnew",
+			"style": {
+				"navigationBarTitleText": "设备管理",
+				"disableScroll": false
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "嘉禾云办公",
+				"disableScroll": false
+			}
+		},
+	
+		{
+			"path": "pages/main/mainlogo",
+			"style": {
+				"navigationBarTitleText": "设备管理图片界面"
+			}
+		},
+		{
+			"path": "pages/main/main",
+			"style": {
+				"navigationBarTitleText": "设备管理"
+			}
+		},
+		{
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"animationType": "slide-in-right",
+				"animationDuration": 300
+			}
+		},{
+			"path": "pages/helpinput/storehelpinput",
+			"style": {
+				"navigationStyle": "custom" //设置采用自定义导航
+			}
+		}, {
+			"path": "pages/helpinput/emphelpinput",
+			"style": {
+				"navigationStyle": "custom" //设置采用自定义导航
+			}
+		},
+		{
+			"path": "pages/helpinput/projecthelpinput",
+			"style": {
+				"navigationStyle": "custom" //设置采用自定义导航
+			}
+		},
+		{
+			"path": "pages/helpinput/costtypehelpinput",
+			"style": {
+				"navigationStyle": "custom" //设置采用自定义导航
+				// "navigationBarTitleText": "费用类型",
+				// "animationType": "slide-in-bottom",
+				// "animationDuration": 300
+			}
+		},{
+            "path" : "pages/helpinput/itemhelpinput",
+            "style" : {
+				"navigationStyle": "custom" 
+			}
+        },
+		{
+			"path" : "pages/daily/dailylist",
+			"style" : {
+				// "navigationStyle": "custom",
+				"navigationBarTitleText": "日志列表查询",
+				"animationType": "slide-in-right",
+				"animationDuration": 300
+			}
+		},{
+			"path" : "pages/daily/dailyadd",
+			"style" : {
+				// "navigationStyle": "custom",
+				"navigationBarTitleText": "日志录入",
+				"animationType": "slide-in-right",
+				"animationDuration": 300
+			}
+		},{
+			"path" : "pages/daily/dailycalendar",
+			"style" : {
+				// "navigationStyle": "custom",
+				"navigationBarTitleText": "打卡日历",
+				"animationType": "slide-in-right",
+				"animationDuration": 300
+			}
+		}
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#73b4eb",
+		"backgroundColor": "#5aa9e1"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#007AFF",
+		"borderStyle": "black",
+		"backgroundColor": "#F8F8F8",
+		"list": [{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/navbottom/sb.png",
+				"selectedIconPath": "static/navbottom/sbS.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/home/mytask",
+				"iconPath": "static/navbottom/sb.png",
+				"selectedIconPath": "static/navbottom/sbS.png",
+				"text": "工作台"
+			},
+			{
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/navbottom/home.png",
+				"selectedIconPath": "static/navbottom/homeS.png",
+				"text": "我的"
+			}
+		]
+	},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				// "path": "pages/home/home", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
+}
