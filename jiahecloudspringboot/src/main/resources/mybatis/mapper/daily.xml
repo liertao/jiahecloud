@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 映射文件，namespace指向接口 -->
+<mapper namespace="com.jiahe.jiahecloudspringboot.mapper.DailyMapper">
+
+    <!-- 查询日志信息  分页查询 -->
+    <select id="loadDaily" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        SELECT t.id           as "id",
+                t.project_name as "projectName",
+                t.cost_name    as "costName",
+                t.cost_hours   as "costHours",
+                t.unit_cost    as "unitCost",
+                t.total        as "total",
+                to_char(t.work_date, 'yyyy-MM-dd') || '(星期' ||
+                   (SELECT to_char(to_date(to_char(t.work_date, 'yyyy-MM-dd'),
+                                           'YYYY-MM-DD'),
+                                   'd') - 1
+                      FROM DUAL) || ')' as "workDate",
+                t.work_add     as "workAdd",
+                t.comments     as "comments",
+                t.check_flag   as "checkResult"
+            FROM (SELECT temp.*, ROWNUM RN
+            FROM (select c.id,
+            f.unit_name || '-' || p.project_name project_name,
+            t.cost_name,
+            c.cost_hours,
+            c.unit_cost,
+            c.cost_hours * c.unit_cost total,
+            c.work_date,
+            c.work_add,
+            c.comments,
+            decode(c.check_flag, null, '否', '是') check_flag
+            from project_cost c,
+            project      p,
+            cost_type    t,
+            log_id       l,
+            fgl_unit     f
+            where c.project_no = p.project_no
+            and c.cost_type = t.cost_type
+            and c.create_user = l.log_id
+            and p.customer_no = f.unit_code
+            and c.create_user = #{logId,jdbcType=VARCHAR}
+            order by c.work_date desc) temp
+        WHERE ROWNUM &lt;= #{num,jdbcType=VARCHAR}) t
+        WHERE RN &gt; (#{num,jdbcType=VARCHAR}-10)
+    </select>
+
+    <!-- 查询日志信息  根据特定日期查询 -->
+    <select id="loadDailyByDate" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        SELECT t.id           as "id",
+                t.project_name as "projectName",
+                t.cost_name    as "costName",
+                t.cost_hours   as "costHours",
+                t.unit_cost    as "unitCost",
+                t.total        as "total",
+                to_char(t.work_date, 'yyyy-MM-dd') || '(星期' ||
+                   (SELECT to_char(to_date(to_char(t.work_date, 'yyyy-MM-dd'),
+                                           'YYYY-MM-DD'),
+                                   'd') - 1
+                      FROM DUAL) || ')' as "workDate",
+                t.work_add     as "workAdd",
+                t.comments     as "comments",
+                t.check_flag   as "checkResult"
+            FROM (SELECT temp.*, ROWNUM RN
+            FROM (select c.id,
+            f.unit_name || '-' || p.project_name project_name,
+            t.cost_name,
+            c.cost_hours,
+            c.unit_cost,
+            c.cost_hours * c.unit_cost total,
+            c.work_date,
+            c.work_add,
+            c.comments,
+            decode(c.check_flag, null, '否', '是') check_flag
+            from project_cost c,
+            project      p,
+            cost_type    t,
+            log_id       l,
+            fgl_unit     f
+            where c.project_no = p.project_no
+            and c.cost_type = t.cost_type
+            and c.create_user = l.log_id
+            and p.customer_no = f.unit_code
+            and c.create_user = #{logId,jdbcType=VARCHAR}
+            and to_char(c.work_date, 'yyyy-MM-dd') = #{workDate,jdbcType=VARCHAR}
+            order by c.work_date desc) temp
+        WHERE 1=1) t
+    </select>
+
+    <!-- 查询日志日期列表 -->
+    <select id="loadDailyCurrentWorkDate" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select to_char(c.work_date,'yyyy-MM-dd') as "workDate"
+          from project_cost c, project p, cost_type t, log_id l, fgl_unit f
+         where c.project_no = p.project_no(+)
+           and c.cost_type = t.cost_type(+)
+           and c.create_user = l.log_id(+)
+           and p.customer_no = f.unit_code(+)
+           and c.create_user = #{logId,jdbcType=VARCHAR}
+           and to_char(c.work_date, 'yyyy') = to_char(sysdate, 'yyyy')
+         order by c.work_date
+    </select>
+
+    <!-- 查询当年应该写但是没写的日期日期列表 -->
+    <select id="loadUNWriteWorkDate" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select to_char(f.work_date,'yyyy-MM-dd') as "workDate"
+        from work_dates f
+        where 1 = 1
+        and to_char(f.work_date,'yyyyMMdd') &lt;= to_char(sysdate,'yyyyMMdd')
+        and to_char(f.work_date, 'yyyy') = to_char(sysdate, 'yyyy')
+        and f.rest_flag is null
+        and f.work_date >=
+       (select min(t.work_date)
+          from project_cost t
+         where t.create_user = #{logId,jdbcType=VARCHAR}
+           and to_char(f.work_date, 'yyyy') = to_char(sysdate, 'yyyy'))
+        and not exists (select 'X'
+        from project_cost t
+        where to_char(t.work_date, 'yyyy-MM-dd') =
+        to_char(f.work_date, 'yyyy-MM-dd')
+        and t.create_user = #{logId,jdbcType=VARCHAR})
+        and to_char(f.work_date, 'yyyy') = to_char(sysdate, 'yyyy')
+        order by f.work_date
+    </select>
+
+    <!-- 查询当年的日志信息
+    <select id="loadDailyByWorkDate" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select c.id as "id",
+               p.project_name as "projectName",
+               t.cost_name as "costName",
+               c.cost_hours as "costHours",
+               c.unit_cost as "unitCost",
+               c.cost_hours * c.unit_cost as "total",
+               to_char(c.work_date, 'yyyy-MM-dd') || '(星期' ||
+               (SELECT to_char(to_date(to_char(c.work_date, 'yyyy-MM-dd'),
+                                       'YYYY-MM-DD'),
+                               'd') - 1
+                  FROM DUAL) || ')' as "workDate",
+               c.work_add as "workAdd",
+               c.comments as "comments",
+               c.check_flag as "checkResult"
+          from project_cost c, project p, cost_type t, log_id l, fgl_unit f
+         where c.project_no = p.project_no
+           and c.cost_type = t.cost_type
+           and c.create_user = l.log_id
+           and p.customer_no = f.unit_code
+           and c.create_user = #{logId,jdbcType=VARCHAR}
+           and to_char(c.work_date, 'yyyyMMdd') = #{workDate,jdbcType=VARCHAR}
+           and to_char(c.work_date, 'yyyy') = to_char(sysdate, 'yyyy')
+         order by c.work_date desc
+    </select>-->
+
+    <!-- 根据id删除日志-->
+    <delete id="delDailyById" parameterType="java.util.Map">
+        delete from project_cost f where f.id = #{id,jdbcType=NUMERIC}
+    </delete>
+
+    <!-- 日志新增 -->
+    <insert id="dailyAdd" parameterType="com.jiahe.jiahecloudspringboot.common.entity.ProjectCost">
+      insert into project_cost
+          (id,
+           project_no,
+           cost_type,
+           cost_hours,
+           unit_cost,
+           create_user,
+           create_date,
+           work_date,
+           check_flag,
+           comments,
+           work_add)
+        values
+          (project_cost_id.nextval,
+           #{projectNo,jdbcType=VARCHAR},
+           #{costType,jdbcType=VARCHAR},
+           #{costHours,jdbcType=NUMERIC},
+           #{unitCost,jdbcType=NUMERIC},
+           #{createUser,jdbcType=VARCHAR},
+           #{createDate,jdbcType=DATE},
+           #{workDate,jdbcType=DATE},
+           '',
+           #{comments,jdbcType=VARCHAR},
+           #{workAdd,jdbcType=VARCHAR})
+    </insert>
+
+    <!--工作日期表相关操作-->
+    <!-- 查询日志日期列表 -->
+    <select id="loadWorkDay" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select to_char(c.work_date,'yyyy-MM-dd') as "workDate"
+          from project_cost c, project p, cost_type t, log_id l, fgl_unit f
+         where c.project_no = p.project_no
+           and c.cost_type = t.cost_type
+           and c.create_user = l.log_id
+           and p.customer_no = f.unit_code
+           and c.create_user = #{logId,jdbcType=VARCHAR})
+           and to_char(c.work_date, 'yyyy') = to_char(sysdate, 'yyyy')
+         order by c.work_date desc
+    </select>
+
+</mapper>

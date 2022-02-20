@@ -1,0 +1,88 @@
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@210.12.53.106:1521:orcl
+    username: project
+    password: project
+    dbType: oracle
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x' FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,logback
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  http:
+    encoding:
+      charset: UTF-8
+  mvc:
+    date-format: yyyy-MM-dd
+    static-path-pattern: /**
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+spring.jackson.serialization.indent-output: true
+#logging.level.com.liertao.myspringboot.mapper: debug
+#logging.file: d:/logs/msg.log
+#logging.level.ROOT: info
+#logging.level.org.springframework: error
+#logging.level.org.apache: error
+server:
+  port: 80
+  servlet:
+    context-path: /
+  ssl:
+    key-store: classpath:4522308_jiehecloud.top.pfx
+    key-alias: alias
+    enabled: false
+    key-store-password: sB9pWk4S
+    key-store-type: PKCS12
+    protocol: TLS
+
+#数据库类型为oracle
+#spring.datasource.dbType: oracle
+#spring.datasource.dbType: oracle
+#启动时初始化5个连接
+#spring.datasource.initialSize=5
+#最小空闲连接5个
+#spring.datasource.minIdle=5
+#最大连接数量20
+#spring.datasource.maxActive=20
+#获取连接等待时间60秒，超出报错
+#spring.datasource.maxWait=60000
+#每60秒执行一次连接回收器
+#spring.datasource.timeBetweenEvictionRunsMillis=60000
+#5分钟内没有任何操作的空闲连接会被回收
+#spring.datasource.minEvictableIdleTimeMillis=300000
+#验证连接有效性的SQL
+#spring.datasource.validationQuery=select 'x'
+#空闲时校验，建议开启
+#spring.datasource.testWhileIdle=true
+#使用中是否校验有效性，推荐关闭
+#spring.datasource.testOnBorrow=false
+#归还连接时校验有效性，推荐关闭
+#spring.datasource.testOnReturn=false
+#oracle推荐打开
+#spring.datasource.poolPreparedStatements=true
+#设置过滤器，stat用于接收状态，wall用于防止SQL注入,logback则说明使用logback日志输出
+#spring.datasource.filters=stat,wall,logback
+#统计所有数据源状态
+#spring.datasource.useGlobalDataSourceStat=true
+#sql合并统计，与设置慢SQL时间为500毫秒
+#spring.datasource.connectionProperties=druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+#==权限配置(未启用)============================================================================================
+app.maxBtnTag: 5
+
+#==跨域配置=============================================================================
+app.kyPort: 63342

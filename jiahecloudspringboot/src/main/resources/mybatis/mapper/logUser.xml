@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 映射文件，namespace指向接口 -->
+<mapper namespace="com.jiahe.jiahecloudspringboot.mapper.LogUserMapper">
+
+    <!-- 登录校验 -->
+    <select id="checkLogin" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+      select i.id       as "id",
+               i.log_id   as "logId",
+               i.log_pwd  as "logPwd",
+               i.log_name as "logName"
+          from log_id i where i.log_id = #{logId,jdbcType=VARCHAR}
+    </select>
+</mapper>

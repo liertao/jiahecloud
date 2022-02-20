@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 映射文件，namespace指向接口 -->
+<mapper namespace="com.jiahe.jiahecloudspringboot.mapper.HelpInputMapper">
+
+    <!-- 处理任务表ID不匹配问题 -->
+    <select id="manProIds" statementType="CALLABLE">
+        {call JH_SYS_BASIC.up_procost_ids}
+    </select>
+
+    <!-- 获取所有的项目信息 -->
+    <select id="loadPorjects" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select u.unit_name || '-' || f.project_name as "projectName",
+               f.project_no as "projectNo",
+              u.unit_name || '-' || f.project_name as "title"
+          from project f, fgl_unit u
+         where f.customer_no = u.unit_code
+         <if test="filter!=null and filter !=''">
+             and f.project_name like '%${filter}%'
+         </if>
+    </select>
+
+    <!-- 获取所有的费用类型信息 -->
+    <select id="loadCostType" resultType="java.util.LinkedHashMap">
+        select f.cost_type as "costType", f.cost_name as "costName", f.cost_name as "title" from cost_type f
+    </select>
+
+    <!-- 根据年份获取 数据库 work_dates当年的所有数据 -->
+    <select id="loadDateByYear" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select to_char(f.work_date,'yyyy-MM-dd') as "workDate", f.rest_flag as "restFlag"
+          from work_dates f
+         where 1 = 1
+           and to_char(f.work_date, 'yyyy') = #{year,jdbcType=VARCHAR} order by f.work_date
+    </select>
+
+    <!-- 根据日期维护  work_date表的  休息日信息 -->
+    <update id="updateWorkDatesByDate" parameterType="java.util.Map">
+        update work_dates f
+           set f.rest_flag = 'Y'
+         where to_char(f.work_date, 'yyyy-MM-dd') = #{ddate,jdbcType=VARCHAR}
+    </update>
+</mapper>
