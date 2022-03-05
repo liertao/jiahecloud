@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 映射文件，namespace指向接口 -->
+<mapper namespace="com.jiahe.jiahecloudspringboot.mapper.DepartmentMapper">
+
+    <!-- 获取所有的费用类型信息 -->
+    <select id="loadAllDept" resultType="java.util.LinkedHashMap">
+        select t.id as "id", t.department_code as "departmentCode", t.department_name as "departmentName" from department t order by t.department_code
+    </select>
+
+    <!-- 部门新增 -->
+    <insert id="deptAdd" parameterType="com.jiahe.jiahecloudspringboot.common.entity.Department">
+        insert into department(id,department_code,department_name)
+        values (department_id.nextval,#{departmentCode,jdbcType=VARCHAR},#{departmentName,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 根据id删除部门-->
+    <delete id="delDeptById" parameterType="java.util.Map">
+        delete from department f where f.id = #{id,jdbcType=NUMERIC}
+    </delete>
+
+    <!-- 根据id更新部门信息 -->
+    <update id="updateDeptById" parameterType="java.util.Map">
+        update department t set t.department_code = #{departmentCode,jdbcType=VARCHAR},
+          t.department_name = #{departmentName,jdbcType=VARCHAR} where t.id = #{id,jdbcType=NUMERIC}
+    </update>
+</mapper>
