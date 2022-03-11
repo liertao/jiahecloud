@@ -14,4 +14,12 @@ public interface LogUserMapper {
      * @throws Exception
      */
     public List<Map> checkLogin(Map params)throws Exception;
+
+    /**
+     * 根据部门查询人员信息
+     * @param params
+     * @return
+     * @throws Exception
+     */
+    public List<Map> loadEmpByDeptCode(Map params)throws Exception;
 }

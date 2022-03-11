@@ -13,4 +13,14 @@
                i.log_name as "logName"
           from log_id i where i.log_id = #{logId,jdbcType=VARCHAR}
     </select>
+
+    <!-- 按照部门查询人员 -->
+    <select id="loadEmpByDeptCode" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select i.id  as "id",
+        i.log_id      as "logId",
+        i.log_pwd     as "logPwd",
+        i.log_name    as "logName",
+        i.secclass    as "secclass"
+        from log_id i where i.dept_code = #{departmentCode,jdbcType=VARCHAR}
+    </select>
 </mapper>

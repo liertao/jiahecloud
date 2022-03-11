@@ -1,7 +1,9 @@
 package com.jiahe.jiahecloudspringboot.mapper;
 
 import com.jiahe.jiahecloudspringboot.common.entity.ProjectCost;
+import org.apache.ibatis.annotations.Select;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,4 +53,8 @@ public interface DailyMapper {
      * @throws Exception
      */
     public List<String> loadDailyByDate(Map params)throws Exception;
+
+    public List<ProjectCost> selectUserinfo(ProjectCost projectCost)throws Exception;
+
+    public Long selectUserCount(ProjectCost projectCost)throws Exception;
 }

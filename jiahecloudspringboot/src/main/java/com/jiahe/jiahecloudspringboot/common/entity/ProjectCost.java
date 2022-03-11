@@ -13,6 +13,8 @@ public class ProjectCost {
     private Date workDate;
     private String comments;
     private String workAdd;
+    private Integer pageNum;
+    private Integer pageSize;
 
     public Long getId() {
         return id;
@@ -92,5 +94,21 @@ public class ProjectCost {
 
     public void setUnitCost(Double unitCost) {
         this.unitCost = unitCost;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }

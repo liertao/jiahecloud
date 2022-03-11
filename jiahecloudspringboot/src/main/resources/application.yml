@@ -31,6 +31,10 @@ spring:
 mybatis:
   config-location: classpath:/mybatis/mybatis-config.xml
   mapper-locations: classpath:/mybatis/mapper/*.xml
+logging:
+  level:
+     com.jiahe.jiahecloudspringboot.mapper.DailyMapper : debug
+     com.jiahe.jiahecloudspringboot.mapper.LogUserMapper : debug
 spring.jackson.serialization.indent-output: true
 #logging.level.com.liertao.myspringboot.mapper: debug
 #logging.file: d:/logs/msg.log
@@ -48,6 +52,19 @@ server:
     key-store-password: sB9pWk4S
     key-store-type: PKCS12
     protocol: TLS
+#mybatis-plus:
+#  configuration:
+#    map-underscore-to-camel-case: true
+#    auto-mapping-behavior: full
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  mapper-locations: classpath*:mapper/**/*Mapper.xml
+#  global-config:
+#    # 逻辑删除配置
+#    db-config:
+#      # 删除前
+#      logic-not-delete-value: 1
+#      # 删除后
+#      logic-delete-value: 0
 
 #数据库类型为oracle
 #spring.datasource.dbType: oracle

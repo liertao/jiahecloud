@@ -1,18 +1,18 @@
 package com.jiahe.jiahecloudspringboot.controller;
 
 import com.jiahe.jiahecloudspringboot.common.entity.ProjectCost;
-import com.jiahe.jiahecloudspringboot.common.util.WorkDayUtil;
 import com.jiahe.jiahecloudspringboot.service.DailyService;
 import com.jiahe.jiahecloudspringboot.service.HelpInputService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@CrossOrigin
 @RestController
 public class DailyController {
 
@@ -97,7 +97,7 @@ public class DailyController {
             projectCost.setProjectNo(params.get("projectNo"));
             projectCost.setCostType(params.get("costType"));
             projectCost.setCostHours(Double.valueOf(params.get("costHours")));
-            projectCost.setUnitCost(Double.valueOf(params.get("unitCost")));
+            projectCost.setUnitCost(Double.valueOf(params.get("unitCost")==null?"200":params.get("unitCost")));
             projectCost.setCreateUser(params.get("createUser"));
             projectCost.setCreateDate(new Date());
             projectCost.setWorkDate(new SimpleDateFormat("yyyy-MM-dd").parse(params.get("workDate")));
@@ -107,6 +107,7 @@ public class DailyController {
             helpInputService.manProIds();
             dailyService.dailyAdd(projectCost);
             result.put("success", true);
+            result.put("code", 20000);
             result.put("msg", "保存成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,13 +118,50 @@ public class DailyController {
     }
 
     @RequestMapping("/daily/delete")
-    public Map delDaily(@RequestParam Map<String, String> params, HttpServletResponse response) {
+    @ApiOperation(value = "根据用户id删除用户", notes = "逻辑删除, 置enabled为false")
+    public Map delDaily(@RequestParam Map params, HttpServletResponse response) {
         Map result = new HashMap();
         try {
-            dailyService.delDailyById(params);
+            String str[] = params.get("ids").toString().split(",");
+            for(int i=0; i<str.length; i++){
+                Map param2 = new HashMap();
+                param2.put("id", Long.valueOf(str[i]));
+                dailyService.delDailyById(param2);
+            }
             result.put("success", true);
+            result.put("code", 20000);
             result.put("msg", "删除成功");
         } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("msg", e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping("/daily/list")
+    public Map selectUserinfo(@RequestParam Map<String, String> params, HttpServletResponse response) {
+        Map result = new HashMap();
+        try {
+            ProjectCost projectCost=new ProjectCost();
+            projectCost.setCreateUser(params.get("logId"));
+            projectCost.setPageNum(Integer.valueOf(params.get("pageNum")));//设置当前为第2页
+            projectCost.setPageSize(Integer.valueOf(params.get("pageSize")));//设置每页总共3条数据
+            projectCost.setProjectNo(params.get("projectNo"));
+            projectCost.setCostType(params.get("costType"));
+            projectCost.setWorkAdd(params.get("workAdd"));
+            String date = params.get("workDate");
+            projectCost.setWorkDate(date!=null?(new SimpleDateFormat("yyyy-MM-dd").parse(date.split("T")[0])):null);
+            List<ProjectCost> userinfos = dailyService.selectUserinfo(projectCost);
+            Long count = dailyService.selectUserCount(projectCost);
+            List list = helpInputService.loadPorjects(new HashMap());
+            result.put("success", true);
+            result.put("code", 20000);
+            result.put("msg", "加载成功");
+            result.put("root", userinfos);
+            result.put("count", count);
+            result.put("projects", list);
+        }catch (Exception e) {
             e.printStackTrace();
             result.put("success", false);
             result.put("msg", e.getMessage());

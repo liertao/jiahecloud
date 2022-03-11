@@ -17,4 +17,8 @@ public class LogUserService {
     public List<Map> checkLogin(Map params)throws Exception{
         return logUserMapper.checkLogin(params);
     }
+
+    public List<Map> loadEmpByDeptCode(Map params)throws Exception{
+        return logUserMapper.loadEmpByDeptCode(params);
+    }
 }

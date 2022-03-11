@@ -37,4 +37,12 @@ public class DailyService {
     public List<String> loadDailyByDate(Map params)throws Exception{
         return dailyMapper.loadDailyByDate(params);
     }
+
+    public List selectUserinfo(ProjectCost projectCost)throws Exception{
+        return dailyMapper.selectUserinfo(projectCost);
+    }
+
+    public Long selectUserCount(ProjectCost projectCost)throws Exception{
+        return dailyMapper.selectUserCount(projectCost);
+    }
 }

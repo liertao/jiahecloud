@@ -4,6 +4,7 @@ public class Department {
     private Long id;
     private String departmentCode;
     private String departmentName;
+    private String label;
 
     public Long getId() {
         return id;
@@ -27,5 +28,13 @@ public class Department {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }
