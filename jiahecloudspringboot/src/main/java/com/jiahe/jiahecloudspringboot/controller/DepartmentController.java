@@ -1,10 +1,8 @@
 package com.jiahe.jiahecloudspringboot.controller;
 
-import com.google.gson.JsonArray;
 import com.jiahe.jiahecloudspringboot.common.entity.Department;
 import com.jiahe.jiahecloudspringboot.service.DepartmentService;
 
-import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

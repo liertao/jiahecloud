@@ -22,4 +22,8 @@ public interface LogUserMapper {
      * @throws Exception
      */
     public List<Map> loadEmpByDeptCode(Map params)throws Exception;
+
+    public List<Map> loadPageEmpByDeptCode(Map params) throws Exception;
+
+    public Long loadCountEmpByDeptCode(Map params)throws Exception;
 }

@@ -131,4 +131,23 @@ public class LoginController {
         }
         return result;
     }
+
+    @RequestMapping("/department/loadPageEmpByDeptCode")
+    public Map loadPageEmpByDeptCode(@RequestParam Map<String, String> params, HttpServletResponse response) {
+        Map result = new HashMap();
+        try {
+            List userinfos = logUserService.loadPageEmpByDeptCode(params);
+            Long count = logUserService.loadCountEmpByDeptCode(params);
+            result.put("success", true);
+            result.put("code", 20000);
+            result.put("count", count);
+            result.put("msg", "加载成功");
+            result.put("root", userinfos);
+        }catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("msg", e.getMessage());
+        }
+        return result;
+    }
 }

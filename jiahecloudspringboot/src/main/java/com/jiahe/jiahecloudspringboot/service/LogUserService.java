@@ -21,4 +21,12 @@ public class LogUserService {
     public List<Map> loadEmpByDeptCode(Map params)throws Exception{
         return logUserMapper.loadEmpByDeptCode(params);
     }
+
+    public List<Map> loadPageEmpByDeptCode(Map params)throws Exception{
+        return logUserMapper.loadPageEmpByDeptCode(params);
+    }
+
+    public Long loadCountEmpByDeptCode(Map params)throws Exception{
+        return logUserMapper.loadCountEmpByDeptCode(params);
+    }
 }

@@ -23,4 +23,28 @@
         i.secclass    as "secclass"
         from log_id i where i.dept_code = #{departmentCode,jdbcType=VARCHAR}
     </select>
+
+    <!-- 按照部门查询人员-分页 -->
+    <select id="loadPageEmpByDeptCode" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+        select     re.id       "id",
+                    re.log_id   "logId",
+                    re.log_pwd  "logPwd",
+                    re.log_name "logName",
+                    re.secclass "secclass"
+              from (select row_.*, rownum rownum_
+                    from (select i.id       id,
+                                i.log_id   log_id,
+                                i.log_pwd  log_pwd,
+                                i.log_name log_name,
+                                i.secclass secclass
+                                from log_id i
+                                where i.dept_code = #{departmentCode,jdbcType=VARCHAR}) row_
+                    where rownum &lt;=  #{pageNum} * #{pageSize} ) re
+            where rownum_ &gt;  (#{pageNum} - 1) * #{pageSize}
+    </select>
+
+    <!-- 按照部门查询人员-总数 -->
+    <select id="loadCountEmpByDeptCode" parameterType="java.util.Map" resultType="java.lang.Long">
+        select count(*) from log_id i where i.dept_code = #{departmentCode,jdbcType=VARCHAR}
+    </select>
 </mapper>

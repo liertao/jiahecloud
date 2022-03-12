@@ -210,28 +210,28 @@
                 re.comments as "comments",
                 re.log_name as "createUser",
                 to_char(re.create_date,'yyyy-MM-dd') as "createDate"
-                from (select row_.*, rownum rownum_
-                from (select f.*, p.project_name, c.cost_name,i.log_name
-                from project_cost f, project p, cost_type c,log_id i
-                where f.project_no = p.project_no
-                and f.cost_type = c.cost_type(+)
-                and f.create_user = i.log_id
-                and f.create_user = #{createUser}
-                <if test="projectNo!=null and projectNo !=''">
-                    and f.project_no like '%${projectNo}%'
-                </if>
-                <if test="costType!=null and costType !=''">
-                    and f.cost_type = #{costType}
-                </if>
-                <if test="workAdd!=null and workAdd !=''">
-                    and f.work_add = '${workAdd}'
-                </if>
-                <if test="workDate!=null">
-                    and to_char(f.work_date,'yyyy-MM-dd') = to_char(#{workDate, jdbcType=DATE},'yyyy-MM-dd')
-                </if>
-                order by f.work_date desc) row_
+           from (select row_.*, rownum rownum_
+                        from (select f.*, p.project_name, c.cost_name,i.log_name
+                        from project_cost f, project p, cost_type c,log_id i
+                        where f.project_no = p.project_no
+                                and f.cost_type = c.cost_type(+)
+                                and f.create_user = i.log_id
+                                and f.create_user = #{createUser}
+                                <if test="projectNo!=null and projectNo !=''">
+                                    and f.project_no like '%${projectNo}%'
+                                </if>
+                                <if test="costType!=null and costType !=''">
+                                    and f.cost_type = #{costType}
+                                </if>
+                                <if test="workAdd!=null and workAdd !=''">
+                                    and f.work_add = '${workAdd}'
+                                </if>
+                                <if test="workDate!=null">
+                                    and to_char(f.work_date,'yyyy-MM-dd') = to_char(#{workDate, jdbcType=DATE},'yyyy-MM-dd')
+                                </if>
+                        order by f.work_date desc) row_
                 where rownum &lt;=  #{pageNum} * #{pageSize} ) re
-                where rownum_ &gt;  (#{pageNum} - 1) * #{pageSize}
+          where rownum_ &gt;  (#{pageNum} - 1) * #{pageSize}
     </select>
 
     <select id="selectUserCount" parameterType="com.jiahe.jiahecloudspringboot.common.entity.ProjectCost" resultType="java.lang.Long">
