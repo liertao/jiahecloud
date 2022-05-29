@@ -5,6 +5,7 @@ public class Department {
     private String departmentCode;
     private String departmentName;
     private String label;
+    private String icon;
 
     public Long getId() {
         return id;
@@ -36,5 +37,13 @@ public class Department {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

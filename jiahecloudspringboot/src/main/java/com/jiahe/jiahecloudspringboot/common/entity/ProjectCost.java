@@ -5,6 +5,7 @@ import java.util.Date;
 public class ProjectCost {
     private Long id;
     private String projectNo;
+    private String projectName;
     private String costType;
     private Double costHours;
     private Double unitCost;
@@ -110,5 +111,13 @@ public class ProjectCost {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

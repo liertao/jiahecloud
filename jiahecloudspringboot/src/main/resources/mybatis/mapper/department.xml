@@ -7,7 +7,9 @@
 
     <!-- 获取所有的费用类型信息 -->
     <select id="loadAllDept" resultType="java.util.LinkedHashMap">
-        select t.id as "id", t.department_code as "departmentCode", t.department_name as "departmentName", t.department_name as "label" from department t order by t.department_code
+        select t.id as "id", t.department_code as "departmentCode", t.department_name as "departmentName",
+         t.department_name as "label", 'el-icon-s-management' as "icon"
+         from department t order by t.department_code
     </select>
 
     <!-- 部门新增 -->
